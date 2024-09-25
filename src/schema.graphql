@@ -1,0 +1,40 @@
+type Query {
+  test: Boolean!
+}
+
+type Mutation {
+  start_detection(save_record_data: DetectionSaveRecordDataInput!): Boolean!
+  stop_detection: Boolean!
+}
+
+type Subscription {
+  test: Int!
+  detections: [Detection!]!
+  status: Status!
+}
+
+enum Status {
+  IDLE
+  RUNNING
+}
+
+enum DetectionSaveRecordType {
+  IQ_DATA_DETECTIONS
+  IQ_DATA_NO_DETECTIONS
+  PINK_MATRIX_DETECTIONS
+  PINK_MATRIX_NO_DETECTIONS
+}
+
+input DetectionSaveRecordDataInput {
+  types: [DetectionSaveRecordType!]!
+  detection: SaveRecordDetectionInput
+}
+
+input SaveRecordDetectionInput {
+  threat_type_ids: [ID!]!
+}
+
+type Detection {
+  type_id: ID!
+  type_name: String!
+}
