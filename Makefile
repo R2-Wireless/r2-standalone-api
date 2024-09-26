@@ -9,4 +9,4 @@ typecheck:
 test:
 	deno test
 start:
-	deno run --watch src/main.ts
+	deno run --watch --allow-read=./src/schema.graphql --allow-net=0.0.0.0:3000 src/main.ts

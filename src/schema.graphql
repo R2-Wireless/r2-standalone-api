@@ -18,6 +18,11 @@ enum Status {
   RUNNING
 }
 
+type Detection {
+  type_id: ID!
+  type_name: String!
+}
+
 enum DetectionSaveRecordType {
   IQ_DATA_DETECTIONS
   IQ_DATA_NO_DETECTIONS
@@ -32,9 +37,4 @@ input DetectionSaveRecordDataInput {
 
 input SaveRecordDetectionInput {
   threat_type_ids: [ID!]!
-}
-
-type Detection {
-  type_id: ID!
-  type_name: String!
 }
