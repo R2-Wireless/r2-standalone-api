@@ -8,7 +8,7 @@ import { ApolloServerPluginDrainHttpServer } from "npm:@apollo/server@^4.11.0/pl
 import { expressMiddleware } from "npm:@apollo/server@^4.11.0/express4";
 import { makeExecutableSchema } from "npm:@graphql-tools/schema@^10.0.6";
 import { WebSocketServer } from "npm:ws@^8.18.0";
-import { useServer } from "npm:graphql-ws@^5.16.0/lib/use/ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 import express from "npm:express@^4.18.2";
 import { subscribe } from "graphql";
 
@@ -23,14 +23,11 @@ const resolvers: gql.Resolvers = {
       await setTimeout(1_000);
       return true;
     },
-    authorized: (_1, _2, ctx) => {
-      return ctx.authorization === "Bearer 123";
-    },
   },
   Subscription: {
     test: {
-      subscribe: async function* (_1, _2, ctx) {
-        let i = ctx.authorization === "Bearer 123" ? 100 : 0;
+      subscribe: async function* (_1, _2) {
+        let i = 0;
         while (true) {
           yield {
             test: i++,
@@ -39,11 +36,55 @@ const resolvers: gql.Resolvers = {
         }
       },
     },
+    status: {
+      subscribe: async function* (_1, _2) {
+        yield {
+          status: gql.Status.RUNNING,
+        };
+        while (true) {
+          await setTimeout(1_000);
+        }
+      },
+    },
+    detections: {
+      subscribe: async function* (_1, _2) {
+        yield {
+          detections: [],
+        };
+        await setTimeout(5_000);
+        yield {
+          detections: [{
+            type_id: "1",
+            type_name: "DJI",
+          }],
+        };
+        await setTimeout(5_000);
+        yield {
+          detections: [{
+            type_id: "1",
+            type_name: "DJI",
+          }, {
+            type_id: "2",
+            type_name: "AUTEL",
+          }],
+        };
+        await setTimeout(5_000);
+        yield {
+          detections: [{
+            type_id: "1",
+            type_name: "DJI",
+          }],
+        };
+        while (true) {
+          await setTimeout(5_000);
+        }
+      },
+    },
   },
 };
-const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 if (import.meta.main) {
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
   const port = 3000;
   const app = express();
   const httpServer = createServer(app);

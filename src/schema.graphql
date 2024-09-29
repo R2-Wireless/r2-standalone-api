@@ -1,6 +1,5 @@
 type Query {
   test: Boolean!
-  authorized: Boolean!
 }
 
 type Mutation {
