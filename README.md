@@ -1,7 +1,6 @@
 # Installation
 
 - Install [Deno](https://deno.com/)
-- Make sure to update to Deno V2
 
 # Usage
 

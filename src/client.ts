@@ -1,7 +1,10 @@
 import * as gql from "./generated/gql.ts";
 import { createClient } from "graphql-ws";
 
-const endpointUrl = "ws://0.0.0.0:3000/graphql";
+const endpointUrl = Deno.env.get("GRAPHQL_ENDPOINT_URL");
+if (!endpointUrl) {
+  throw new Error("GRAPHQL_ENDPOINT_URL environment variable is not set");
+}
 const client = createClient({
   url: endpointUrl,
 });
